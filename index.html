@@ -365,7 +365,7 @@
             border: 2px solid #94a3b8;
         }
 
-        /* 上品で視認性の高いホログラム光沢（mix-blend-mode: overlay による斜めシマー帯） */
+        /* ホログラム光沢 */
         .card-holo-overlay {
             position: absolute;
             inset: 0;
@@ -392,7 +392,7 @@
         .rarity-SR .card-holo-overlay { opacity: 0.42; }
         .rarity-SSR .card-holo-overlay { opacity: 0.78; }
 
-        /* 背面デザイン：疑似スケルトン（スモークアクリル・すりガラス質感）＋極小シリアル刻印 */
+        /* 背面デザイン：疑似スケルトン */
         .card-back-inner {
             width: 100%;
             height: 100%;
@@ -419,7 +419,6 @@
             display: none;
         }
 
-        /* R：透けない不透明マットメタル仕上げ */
         .rarity-R .card-back-inner {
             background:
                 repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0px, rgba(255, 255, 255, 0.04) 2px, transparent 2px, transparent 8px),
@@ -431,7 +430,6 @@
             display: none;
         }
 
-        /* SR：ディープフロスト（重厚なすりガラス越しにシルエットがほのかに浮かぶ＋蒼銀光沢） */
         .rarity-SR .card-back-inner {
             background: linear-gradient(155deg, rgba(12, 18, 36, 0.86) 0%, rgba(23, 37, 84, 0.84) 100%);
             border-color: #38bdf8;
@@ -444,7 +442,6 @@
             filter: blur(4px) saturate(1.1);
         }
 
-        /* SSR：疑似スケルトン（スモークアクリル質感で上品に浮かび上がる＋シームレス虹ホログラム） */
         .rarity-SSR .card-back-inner {
             background: radial-gradient(circle at 50% 45%, rgba(16, 14, 34, 0.56) 0%, rgba(10, 9, 24, 0.78) 100%);
             border-color: #fde047;
@@ -620,7 +617,7 @@
             width: 100%;
             height: 100%;
             text-align: center;
-            padding: 14px 12px;
+            padding: 12px;
             color: var(--text-muted);
             font-size: 0.8rem;
             line-height: 1.45;
@@ -628,8 +625,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            z-index: 2;
+            gap: 6px;
         }
 
         .card-stamp-floating {
@@ -935,7 +931,6 @@
             white-space: nowrap;
         }
 
-        /* スマホ版マイ図鑑：標準3列（デフォルト） / 4列切替 ＋ タップで原寸拡大＆標準操作モーダル */
         @media (max-width: 640px) {
             .binder-grid {
                 grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1078,7 +1073,7 @@
         }
 
         /* =========================================================
-           マイ図鑑：まとめて編集（一括レアリティ変更 ＆ タップ即削除モード）
+           マイ図鑑：まとめて編集
         ========================================================= */
         .binder-batch-bar {
             width: 100%;
@@ -1226,7 +1221,7 @@
         }
 
         /* =========================================================
-           初回限定・お試しチュートリアルバナー＆完了アクション
+           初回お試しバナー（保存済みデータを絶対に上書きしない安全設計）
         ========================================================= */
         .tutorial-banner {
             background: linear-gradient(135deg, rgba(255, 77, 148, 0.22) 0%, rgba(139, 92, 246, 0.24) 50%, rgba(56, 189, 248, 0.2) 100%);
@@ -1241,30 +1236,7 @@
             gap: 12px;
             box-shadow: 0 8px 26px rgba(255, 77, 148, 0.22);
             position: relative;
-            z-index: 45;
-        }
-
-        /* フェーズ1：初回選択待ちロック（タブ・メイン画面を薄くグレーアウトして操作不可） */
-        body.tutorial-gate-locked .nav-tabs,
-        body.tutorial-gate-locked #view-studio,
-        body.tutorial-gate-locked #view-binder,
-        body.tutorial-gate-locked #view-gacha {
-            opacity: 0.34;
-            filter: grayscale(0.55);
-            pointer-events: none !important;
-            user-select: none;
-            transition: opacity 0.25s ease, filter 0.25s ease;
-        }
-
-        /* フェーズ2：お試しプレイ中（図鑑登録・追加アクションのみロック） */
-        body.tutorial-trial-locked #btn-save-to-binder,
-        body.tutorial-trial-locked label[for="input-bulk-binder"],
-        body.tutorial-trial-locked #btn-clear-binder,
-        body.tutorial-trial-locked #btn-toggle-batch-mode {
-            opacity: 0.38;
-            filter: grayscale(0.6);
-            pointer-events: none !important;
-            cursor: not-allowed !important;
+            z-index: 35;
         }
 
         .tutorial-complete-card {
@@ -1419,16 +1391,6 @@
                 transform: scale(1) rotateY(0deg) translateY(0);
                 filter: brightness(1);
             }
-        }
-
-        .vfx-save-pulse {
-            animation: saveCardPulse 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        @keyframes saveCardPulse {
-            0% { transform: scale(1); }
-            40% { transform: scale(1.08); box-shadow: 0 0 36px rgba(255, 77, 148, 0.9); }
-            100% { transform: scale(1); }
         }
 
         .gacha-pack::after {
@@ -1730,7 +1692,7 @@
             align-items: center;
             justify-content: center;
             gap: 14px;
-            padding: 20px;
+            padding: 20px calc(20px + env(safe-area-inset-bottom, 0px)) calc(96px + env(safe-area-inset-bottom, 0px));
         }
 
         /* =========================================================
@@ -1745,7 +1707,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 14px;
+            padding: 14px 14px calc(84px + env(safe-area-inset-bottom, 0px));
             overscroll-behavior: contain;
         }
 
@@ -1757,7 +1719,7 @@
             max-width: 780px;
             max-height: 86vh;
             overflow-y: auto;
-            padding: 18px 18px calc(84px + env(safe-area-inset-bottom, 0px));
+            padding: 18px 18px 24px;
             box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8);
             display: flex;
             flex-direction: column;
@@ -1859,6 +1821,29 @@
                 display: none !important;
             }
         }
+
+        .site-footer {
+            max-width: 1320px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 20px calc(110px + env(safe-area-inset-bottom, 0px));
+        }
+
+        .site-footer-box {
+            background: rgba(24, 26, 41, 0.72);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 12px 16px;
+            font-size: 0.74rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+        }
+
+        .site-footer-title {
+            font-weight: 800;
+            color: #cbd5e1;
+            margin-bottom: 3px;
+        }
     </style>
 </head>
 <body>
@@ -1911,7 +1896,7 @@
 
     <main class="main-container">
 
-        <!-- 初回限定：お試しおみくじ体験チュートリアルガイドバナー -->
+        <!-- 初回限定：お試しおみくじ体験チュートリアルガイドバナー（保存済みデータは絶対に上書きしない） -->
         <div id="first-visit-tutorial-banner" class="tutorial-banner hidden" role="region" aria-label="初回お試しチュートリアル">
             <div style="display:flex; align-items:center; gap:10px; flex:1; min-width:230px;">
                 <span style="font-size:1.55rem;">🎁</span>
@@ -1920,16 +1905,16 @@
                         ✨ 初回限定！お試しおみくじ体験チュートリアル
                     </div>
                     <div id="tutorial-banner-desc" style="font-size:0.78rem; color:#f8fafc; margin-top:2px;">
-                        まずはサンプルカード7枚で「🔮 今日の推しおみくじ」を引いてみよう！体験後にあなた専用の図鑑がスタートします。
+                        サンプルカード7枚で「🔮 今日の推しおみくじ」をお試し体験できます（あなたの保存済み図鑑は上書きされません）。
                     </div>
                 </div>
             </div>
             <div style="display:flex; flex-wrap:wrap; gap:8px;">
                 <button type="button" id="btn-tutorial-go-gacha" class="btn btn-primary" style="padding:8px 14px; font-size:0.8rem;">
-                    <span>🔮 お試しおみくじを引く</span>
+                    <span>🔮 お試しを始める</span>
                 </button>
                 <button type="button" id="btn-tutorial-skip" class="btn" style="padding:8px 12px; font-size:0.78rem;">
-                    <span>⏭️ スキップして始める</span>
+                    <span>✕ 閉じる</span>
                 </button>
             </div>
         </div>
@@ -2089,12 +2074,19 @@
                         <span>📸 スクショ一括トレカ化</span>
                         <input type="file" id="input-bulk-binder" accept="image/*" multiple class="hidden">
                     </label>
+                    <button type="button" id="btn-export-backup" class="btn" title="図鑑データをバックアップファイル(JSON)として保存">
+                        <span>💾 バックアップ保存</span>
+                    </button>
+                    <label for="input-import-backup" class="btn" title="バックアップファイル(JSON)から図鑑データを復元">
+                        <span>📂 復元</span>
+                        <input type="file" id="input-import-backup" accept="application/json,.json" class="hidden">
+                    </label>
                     <button type="button" id="btn-clear-binder" class="btn btn-danger">
                         <span>🗑️ 図鑑を空にする</span>
                     </button>
                 </div>
 
-                <!-- まとめて編集コントロールバー（一括レアリティ変更 ＆ タップ即削除モード） -->
+                <!-- まとめて編集コントロールバー -->
                 <div id="binder-batch-bar" class="binder-batch-bar hidden">
                     <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px;">
                         <div class="chip-row" id="batch-submode-chips" style="gap:6px;">
@@ -2104,7 +2096,6 @@
                         <button type="button" id="btn-close-batch-mode" class="btn" style="padding:4px 10px; font-size:0.74rem;">✕ 編集終了</button>
                     </div>
 
-                    <!-- サブモードA：複数選択してレアリティ一括変更・削除 -->
                     <div id="batch-select-controls" style="display:flex; flex-direction:column; gap:8px;">
                         <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:6px;">
                             <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px;">
@@ -2122,7 +2113,6 @@
                         </div>
                     </div>
 
-                    <!-- サブモードB：タップしていくだけで即削除 -->
                     <div id="batch-instant-delete-hint" class="hidden" style="font-size:0.78rem; font-weight:800; color:#fda4af; display:flex; align-items:center; gap:6px;">
                         <span>💥 削除モード有効中：カードをタップすると確認なしで即座に削除されます（終了するには上の「✕ 編集終了」を押してください）</span>
                     </div>
@@ -2189,10 +2179,10 @@
                             🎉 お試しおみくじ体験完了！
                         </div>
                         <div style="font-size:0.8rem; color:#f8fafc; line-height:1.45;">
-                            下のボタンを押すとサンプルデータと今日のおみくじ制限がリセットされ、<strong>あなただけのパーソナル図鑑</strong>が始まります！
+                            下のボタンを押すと<strong>あなただけのパーソナル図鑑</strong>がスタートします！
                         </div>
                         <button type="button" id="btn-tutorial-finish-start" class="btn btn-primary" style="width:100%; padding:11px 16px; font-size:0.88rem;">
-                            <span>🚀 サンプルを片付けて自分の推し図鑑を始める！</span>
+                            <span>🚀 自分の推し図鑑を始める！</span>
                         </button>
                     </div>
 
@@ -2218,8 +2208,8 @@
                             <button type="button" id="btn-save-gacha-png" class="btn" style="padding:11px 16px; font-size:0.86rem;" title="ポストに添付するトレカ画像を保存">
                                 <span>⬇️ カード画像保存</span>
                             </button>
-                            <button type="button" id="btn-mobile-send-x" class="btn btn-primary hidden" style="padding:12px 22px; font-size:0.92rem;" title="一言とハッシュタグをコピーしてトレカ画像を保存・Xへ送る">
-                                <span>📤 画像をXへ送る（一言コピー済）</span>
+                            <button type="button" id="btn-mobile-send-x" class="btn btn-primary hidden" style="padding:12px 22px; font-size:0.92rem;" title="一言とハッシュタグをコピーしてトレカ画像を共有・Xへ送る">
+                                <span>📤 画像をXへ送る</span>
                             </button>
                         </div>
                         <div id="gacha-mobile-copy-hint" class="hidden" style="font-size:0.74rem; font-weight:800; color:#fde047;">
@@ -2288,9 +2278,9 @@
     </main>
 
     <!-- ご利用にあたって（ローカル保存注記 ＆ 免責事項フッター） -->
-    <footer style="max-width:1320px; width:100%; margin:0 auto; padding:0 20px calc(110px + env(safe-area-inset-bottom, 0px));">
-        <div style="background:rgba(24, 26, 41, 0.72); border:1px solid var(--border-subtle); border-radius:14px; padding:12px 16px; font-size:0.74rem; line-height:1.6; color:var(--text-muted);">
-            <div style="font-weight:800; color:#cbd5e1; margin-bottom:3px;">⚠️ ご利用にあたって（プライバシー ＆ 免責事項）</div>
+    <footer class="site-footer">
+        <div class="site-footer-box">
+            <div class="site-footer-title">⚠️ ご利用にあたって（プライバシー ＆ 免責事項）</div>
             <div>・登録された画像はすべてお使いの端末（ブラウザ内）のみで処理・保存され、外部サーバーへ送信されることはありません。</div>
             <div>・使用する写真やスクリーンショットの著作権・肖像権、および各配信者様・公式のガイドライン（SNS投稿や加工の可否など）については、<strong>ご自身の責任の範囲内にてご確認のうえ</strong>お楽しみください。当ツールの利用により生じたトラブル等について、制作者は一切の責任を負いかねます。</div>
         </div>
@@ -2450,9 +2440,10 @@
         const OSHI_NAME_KEY = 'oshi_card_oshi_name_v1';
         const MOBILE_PIP_POS_KEY = 'oshi_card_mobile_pip_pos_v1';
         const TUTORIAL_COMPLETED_KEY = 'oshi_card_tutorial_completed_v1';
+        const WINDOW_NAME_PREFIX = '__OSHI_CARD_VAULT_V1__:';
 
-        // デフォルトで読み込むGitHub上のサンプル画像7枚（raw直リンク）
-        const DEFAULT_GITHUB_SAMPLES = [
+        // お試し体験用サンプル画像（保存済みデータと混ぜずメモリ上のみで展開）
+        const TRIAL_GITHUB_SAMPLES = [
             { url: 'https://raw.githubusercontent.com/goki4597-create/oshi-images/main/sample1.jpg', rarity: 'SSR', stamp: '👑', color: '#ff4d94' },
             { url: 'https://raw.githubusercontent.com/goki4597-create/oshi-images/main/sample2.jpg', rarity: 'SSR', stamp: '💖', color: '#a855f7' },
             { url: 'https://raw.githubusercontent.com/goki4597-create/oshi-images/main/sample3.jpg', rarity: 'SR', stamp: '🫶', color: '#38bdf8' },
@@ -2476,7 +2467,8 @@
             adminMode: false,
             adminForceRarity: 'AUTO',
             tutorialActive: false,
-            tutorialStep: 'none', // 'none' | 'gate' (開始待ち) | 'trial' (お試し中・図鑑登録のみ不可)
+            tutorialStep: 'none', // 'none' | 'trial'
+            trialCards: [],
             todayGacha: null,
             cachedShareFile: null,
             monthlyDeck: null,
@@ -2501,7 +2493,92 @@
         };
 
         /**
-         * 大容量保存基盤（IndexedDB）
+         * ストレージ安全ラッパー（localStorage ＋ window.name 同期）
+         */
+        function safeStorageGet(key) {
+            try {
+                if (window.localStorage) {
+                    const v = window.localStorage.getItem(key);
+                    if (v !== null) return v;
+                }
+            } catch (e) {}
+            try {
+                if (typeof window.name === 'string' && window.name.startsWith(WINDOW_NAME_PREFIX)) {
+                    const parsed = JSON.parse(window.name.slice(WINDOW_NAME_PREFIX.length));
+                    if (parsed && parsed.kv && Object.prototype.hasOwnProperty.call(parsed.kv, key)) {
+                        return parsed.kv[key];
+                    }
+                }
+            } catch (e) {}
+            return null;
+        }
+
+        function safeStorageSet(key, value) {
+            try {
+                if (window.localStorage) {
+                    window.localStorage.setItem(key, String(value));
+                }
+            } catch (e) {}
+            try {
+                let payload = { cards: null, kv: {} };
+                if (typeof window.name === 'string' && window.name.startsWith(WINDOW_NAME_PREFIX)) {
+                    const existing = JSON.parse(window.name.slice(WINDOW_NAME_PREFIX.length));
+                    if (existing && typeof existing === 'object') {
+                        payload = {
+                            cards: Array.isArray(existing.cards) ? existing.cards : null,
+                            kv: (existing.kv && typeof existing.kv === 'object') ? existing.kv : {}
+                        };
+                    }
+                }
+                payload.kv[key] = String(value);
+                window.name = WINDOW_NAME_PREFIX + JSON.stringify(payload);
+            } catch (e) {}
+        }
+
+        function safeStorageRemove(key) {
+            try {
+                if (window.localStorage) {
+                    window.localStorage.removeItem(key);
+                }
+            } catch (e) {}
+            try {
+                if (typeof window.name === 'string' && window.name.startsWith(WINDOW_NAME_PREFIX)) {
+                    const existing = JSON.parse(window.name.slice(WINDOW_NAME_PREFIX.length));
+                    if (existing && existing.kv && Object.prototype.hasOwnProperty.call(existing.kv, key)) {
+                        delete existing.kv[key];
+                        window.name = WINDOW_NAME_PREFIX + JSON.stringify(existing);
+                    }
+                }
+            } catch (e) {}
+        }
+
+        function writeWindowNameCards(cards) {
+            try {
+                let kv = {};
+                if (typeof window.name === 'string' && window.name.startsWith(WINDOW_NAME_PREFIX)) {
+                    const existing = JSON.parse(window.name.slice(WINDOW_NAME_PREFIX.length));
+                    if (existing && existing.kv && typeof existing.kv === 'object') {
+                        kv = existing.kv;
+                    }
+                }
+                window.name = WINDOW_NAME_PREFIX + JSON.stringify({ cards, kv });
+            } catch (e) {}
+        }
+
+        function readWindowNameCards() {
+            try {
+                if (typeof window.name === 'string' && window.name.startsWith(WINDOW_NAME_PREFIX)) {
+                    const existing = JSON.parse(window.name.slice(WINDOW_NAME_PREFIX.length));
+                    if (existing && Array.isArray(existing.cards)) {
+                        return existing.cards;
+                    }
+                }
+            } catch (e) {}
+            return null;
+        }
+
+        /**
+         * 大容量保存基盤（IndexedDB ＋ localStorage ＋ window.name 3重永続化）
          */
         const CardDB = {
             dbName: 'oshi_card_vault_db',
@@ -2514,15 +2591,19 @@
                         resolve(null);
                         return;
                     }
-                    const req = indexedDB.open(this.dbName, 1);
-                    req.onupgradeneeded = (e) => {
-                        const db = e.target.result;
-                        if (!db.objectStoreNames.contains(this.storeName)) {
-                            db.createObjectStore(this.storeName, { keyPath: 'id' });
-                        }
-                    };
-                    req.onsuccess = (e) => resolve(e.target.result);
-                    req.onerror = () => resolve(null);
+                    try {
+                        const req = indexedDB.open(this.dbName, 1);
+                        req.onupgradeneeded = (e) => {
+                            const db = e.target.result;
+                            if (!db.objectStoreNames.contains(this.storeName)) {
+                                db.createObjectStore(this.storeName, { keyPath: 'id' });
+                            }
+                        };
+                        req.onsuccess = (e) => resolve(e.target.result);
+                        req.onerror = () => resolve(null);
+                    } catch (e) {
+                        resolve(null);
+                    }
                 });
                 return this.dbPromise;
             },
@@ -2530,33 +2611,41 @@
                 const db = await this.open();
                 if (!db) return null;
                 return new Promise((resolve) => {
-                    const tx = db.transaction(this.storeName, 'readonly');
-                    const store = tx.objectStore(this.storeName);
-                    const req = store.getAll();
-                    req.onsuccess = () => {
-                        const list = req.result || [];
-                        list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                        resolve(list);
-                    };
-                    req.onerror = () => resolve([]);
+                    try {
+                        const tx = db.transaction(this.storeName, 'readonly');
+                        const store = tx.objectStore(this.storeName);
+                        const req = store.getAll();
+                        req.onsuccess = () => {
+                            const list = req.result || [];
+                            list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                            resolve(list);
+                        };
+                        req.onerror = () => resolve(null);
+                    } catch (e) {
+                        resolve(null);
+                    }
                 });
             },
             async replaceAllCards(cards) {
                 const db = await this.open();
                 if (!db) return false;
                 return new Promise((resolve) => {
-                    const tx = db.transaction(this.storeName, 'readwrite');
-                    const store = tx.objectStore(this.storeName);
-                    store.clear();
-                    const total = cards.length;
-                    cards.forEach((c, idx) => {
-                        store.put({
-                            ...c,
-                            createdAt: c.createdAt || (Date.now() + (total - idx))
+                    try {
+                        const tx = db.transaction(this.storeName, 'readwrite');
+                        const store = tx.objectStore(this.storeName);
+                        store.clear();
+                        const total = cards.length;
+                        cards.forEach((c, idx) => {
+                            store.put({
+                                ...c,
+                                createdAt: c.createdAt || (Date.now() + (total - idx))
+                            });
                         });
-                    });
-                    tx.oncomplete = () => resolve(true);
-                    tx.onerror = () => resolve(false);
+                        tx.oncomplete = () => resolve(true);
+                        tx.onerror = () => resolve(false);
+                    } catch (e) {
+                        resolve(false);
+                    }
                 });
             }
         };
@@ -2582,14 +2671,13 @@
 
             if (!forceRebuild) {
                 try {
-                    const raw = localStorage.getItem(MONTHLY_DECK_KEY);
+                    const raw = safeStorageGet(MONTHLY_DECK_KEY);
                     if (raw) {
                         const parsed = JSON.parse(raw);
                         if (parsed && parsed.yearMonth === ymKey && Array.isArray(parsed.deckCardIds)) {
                             const validDeckIds = parsed.deckCardIds.filter(id => idSet.has(id));
                             const validDrawnIds = (parsed.drawnCardIds || []).filter(id => idSet.has(id));
 
-                            // デッキ内のカードが削除されて月の日数分に足りなくなった場合、今月デッキ外の予備プールから不足分を自動補充
                             if (validDeckIds.length < daysCount && allIds.length > validDeckIds.length) {
                                 const validDeckSet = new Set(validDeckIds);
                                 const reservePool = allIds.filter(id => !validDeckSet.has(id)).sort(() => Math.random() - 0.5);
@@ -2630,7 +2718,7 @@
         function saveMonthlyDeck() {
             if (!AppState.monthlyDeck) return;
             try {
-                localStorage.setItem(MONTHLY_DECK_KEY, JSON.stringify(AppState.monthlyDeck));
+                safeStorageSet(MONTHLY_DECK_KEY, JSON.stringify(AppState.monthlyDeck));
             } catch (e) {}
         }
 
@@ -2648,7 +2736,7 @@
         }
 
         /**
-         * レアリティ別フルスクリーンカットイン演出（WebGL流体光＋今月デッキ画像3D旋回）
+         * レアリティ別フルスクリーンカットイン演出（WebGL流体光＋デッキ画像3D旋回）
          */
         function playRarityCutin(rarity, onComplete) {
             const overlay = document.getElementById('cutin-overlay');
@@ -2676,11 +2764,14 @@
 
             const rawImageSources = [];
             const seenSrc = new Set();
-            const deck = ensureMonthlyDeck(false);
+            const activePool = (AppState.tutorialActive && AppState.trialCards.length > 0)
+                ? AppState.trialCards
+                : AppState.cards;
+            const deck = !AppState.tutorialActive ? ensureMonthlyDeck(false) : null;
             const deckIdSet = new Set(deck ? deck.deckCardIds : []);
             const sourcePool = deckIdSet.size > 0
-                ? AppState.cards.filter(c => deckIdSet.has(c.id))
-                : AppState.cards;
+                ? activePool.filter(c => deckIdSet.has(c.id))
+                : activePool;
 
             sourcePool.forEach(c => {
                 if (c && c.imageData && !seenSrc.has(c.imageData)) {
@@ -3396,7 +3487,7 @@
         };
 
         /**
-         * 数万通りの重複なしタイトル＆名言自動生成エンジン（文字数制限16文字・36文字以内厳守）
+         * 数万通りの重複なしタイトル＆名言自動生成エンジン
          */
         const MAX_AUTO_TITLE_LEN = 16;
         const MAX_AUTO_QUOTE_LEN = 36;
@@ -3607,6 +3698,147 @@
             });
         }
 
+        function generateCardPngBlob(cardData, serialLabel = 'No.001') {
+            return new Promise((resolve) => {
+                const W = 750;
+                const H = 1075;
+                const canvas = document.createElement('canvas');
+                canvas.width = W;
+                canvas.height = H;
+                const ctx = canvas.getContext('2d');
+
+                const renderAndResolve = (imgOrNull) => {
+                    const grad = ctx.createLinearGradient(0, 0, W, H);
+                    if (cardData.rarity === 'SSR') {
+                        grad.addColorStop(0, '#f59e0b');
+                        grad.addColorStop(0.45, '#ec4899');
+                        grad.addColorStop(0.8, '#8b5cf6');
+                        grad.addColorStop(1, '#3b82f6');
+                    } else if (cardData.rarity === 'SR') {
+                        grad.addColorStop(0, '#1e3a8a');
+                        grad.addColorStop(0.5, '#312e81');
+                        grad.addColorStop(1, '#0f172a');
+                    } else {
+                        grad.addColorStop(0, '#334155');
+                        grad.addColorStop(1, '#0f172a');
+                    }
+                    ctx.fillStyle = grad;
+                    ctx.fillRect(0, 0, W, H);
+
+                    ctx.strokeStyle = cardData.rarity === 'SSR' ? '#fde047' : (cardData.rarity === 'SR' ? '#38bdf8' : '#94a3b8');
+                    ctx.lineWidth = 14;
+                    ctx.strokeRect(7, 7, W - 14, H - 14);
+
+                    ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
+                    ctx.beginPath();
+                    ctx.roundRect(28, 24, 130, 44, 22);
+                    ctx.fill();
+                    ctx.fillStyle = cardData.rarity === 'SSR' ? '#fde047' : (cardData.rarity === 'SR' ? '#7dd3fc' : '#ffffff');
+                    ctx.font = '900 26px Cinzel, serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(cardData.rarity || 'SSR', 93, 47);
+
+                    ctx.fillStyle = 'rgba(0,0,0,0.45)';
+                    ctx.beginPath();
+                    ctx.roundRect(W - 148, 28, 120, 36, 18);
+                    ctx.fill();
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = '700 18px sans-serif';
+                    ctx.fillText(serialLabel, W - 88, 46);
+
+                    const frame = { x: 28, y: 82, w: W - 56, h: 720 };
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.roundRect(frame.x, frame.y, frame.w, frame.h, 22);
+                    ctx.clip();
+                    ctx.fillStyle = '#0b0d17';
+                    ctx.fillRect(frame.x, frame.y, frame.w, frame.h);
+
+                    if (imgOrNull) {
+                        const frameAspect = frame.w / frame.h;
+                        const layout = computeCardImageLayout(
+                            imgOrNull.width,
+                            imgOrNull.height,
+                            frameAspect,
+                            cardData.zoom,
+                            cardData.offsetX,
+                            cardData.offsetY
+                        );
+                        const dw = frame.w * (layout.dispWPercent / 100);
+                        const dh = frame.h * (layout.dispHPercent / 100);
+                        const dx = frame.x + (frame.w - dw) / 2 + frame.w * (layout.shiftXPercentOfFrame / 100);
+                        const dy = frame.y + (frame.h - dh) / 2 + frame.h * (layout.shiftYPercentOfFrame / 100);
+                        ctx.drawImage(imgOrNull, dx, dy, dw, dh);
+                    }
+
+                    if (cardData.stamp) {
+                        ctx.font = '64px sans-serif';
+                        ctx.textAlign = 'right';
+                        ctx.textBaseline = 'bottom';
+                        ctx.fillText(cardData.stamp, frame.x + frame.w - 18, frame.y + frame.h - 14);
+                    }
+                    ctx.restore();
+
+                    ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.roundRect(frame.x, frame.y, frame.w, frame.h, 22);
+                    ctx.stroke();
+
+                    const plate = { x: 28, y: 820, w: W - 56, h: 225 };
+                    ctx.fillStyle = 'rgba(12, 14, 26, 0.88)';
+                    ctx.beginPath();
+                    ctx.roundRect(plate.x, plate.y, plate.w, plate.h, 22);
+                    ctx.fill();
+
+                    ctx.fillStyle = cardData.accentColor || '#ff4d94';
+                    ctx.beginPath();
+                    ctx.roundRect(plate.x + 22, plate.y + 18, 220, 32, 16);
+                    ctx.fill();
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = '800 17px sans-serif';
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText((cardData.oshiName || '推し活メモ').slice(0, 14), plate.x + 36, plate.y + 34);
+
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = '800 30px sans-serif';
+                    ctx.fillText((cardData.title || '').slice(0, 20), plate.x + 22, plate.y + 82);
+
+                    ctx.fillStyle = '#cbd5e1';
+                    ctx.font = '600 20px sans-serif';
+                    const q = cardData.quote || '';
+                    ctx.fillText(q.slice(0, 28), plate.x + 22, plate.y + 124);
+                    if (q.length > 28) {
+                        ctx.fillText(q.slice(28, 56), plate.x + 22, plate.y + 154);
+                    }
+
+                    ctx.fillStyle = '#94a3b8';
+                    ctx.font = '700 16px sans-serif';
+                    ctx.fillText('OSHI CARD VAULT', plate.x + 22, plate.y + 198);
+                    ctx.textAlign = 'right';
+                    ctx.fillText(cardData.streamDate || '', plate.x + plate.w - 22, plate.y + 198);
+
+                    try {
+                        canvas.toBlob((blob) => resolve(blob || null), 'image/png');
+                    } catch (err) {
+                        resolve(null);
+                    }
+                };
+
+                if (cardData.imageData) {
+                    const img = new Image();
+                    img.crossOrigin = 'anonymous';
+                    img.onload = () => renderAndResolve(img);
+                    img.onerror = () => renderAndResolve(null);
+                    img.src = cardData.imageData;
+                } else {
+                    renderAndResolve(null);
+                }
+            });
+        }
+
         function exportCardToPNG(cardData, serialLabel = 'No.001', options = {}) {
             const silent = Boolean(options && options.silent);
             generateCardPngBlob(cardData, serialLabel).then((blob) => {
@@ -3623,6 +3855,23 @@
                 document.body.removeChild(a);
                 setTimeout(() => URL.revokeObjectURL(url), 1000);
                 if (!silent) showToast('トレカ画像をPNGで保存しました！');
+            });
+        }
+
+        function prepareCachedShareFile(cardData, serialLabel = 'No.001') {
+            AppState.cachedShareFile = null;
+            if (!cardData) return;
+            generateCardPngBlob(cardData, serialLabel).then((blob) => {
+                if (!blob) return;
+                try {
+                    AppState.cachedShareFile = new File(
+                        [blob],
+                        `oshi_card_${cardData.rarity || 'SSR'}_${Date.now()}.png`,
+                        { type: 'image/png' }
+                    );
+                } catch (e) {
+                    AppState.cachedShareFile = null;
+                }
             });
         }
 
@@ -3723,9 +3972,6 @@
                 .replace(/"/g, '&quot;');
         }
 
-        /**
-         * トレカDOM構築（両面3D・最大±28°ワイド傾き・線対称疑似スケルトン裏面＆表裏切り替え式）
-         */
         function computeCardImageLayout(imgNaturalW, imgNaturalH, frameAspect, zoomPercent, offsetXPercent, offsetYPercent) {
             const safeW = imgNaturalW > 0 ? imgNaturalW : 3;
             const safeH = imgNaturalH > 0 ? imgNaturalH : 4;
@@ -3745,14 +3991,12 @@
             const dispWPercent = baseWPercent * zoom;
             const dispHPercent = baseHPercent * zoom;
 
-            // 枠からはみ出している余裕分（%）の半分が最大パン可能距離
             const maxPanX = Math.max(0, (dispWPercent - 100) / 2);
             const maxPanY = Math.max(0, (dispHPercent - 100) / 2);
 
             const normX = Math.max(-50, Math.min(50, offsetXPercent || 0)) / 50;
             const normY = Math.max(-50, Math.min(50, offsetYPercent || 0)) / 50;
 
-            // normX = -1（スライダー左端）のとき画像の左側を映す（画像を右へ +maxPanX 移動）
             const shiftXPercentOfFrame = -normX * maxPanX;
             const shiftYPercentOfFrame = -normY * maxPanY;
 
@@ -3771,7 +4015,6 @@
                 const rect = frameEl.getBoundingClientRect();
                 if (rect.width <= 0 || rect.height <= 0) return;
 
-                // 表面のアート枠（標準比率 0.944）と同じトリミング比率に揃えて裏面の偏りを防止
                 const rawAspect = rect.width / rect.height;
                 const frameAspect = isBackMirror
                     ? 0.944
@@ -3785,7 +4028,6 @@
                     cardData.offsetY
                 );
 
-                // 裏面はカード全体（高さ406px）ではなく、表面のアート枠（高さ約282px ≒ 69.5%）の高さ・位置に合わせて配置
                 const scaleH = isBackMirror ? 0.695 : 1;
                 const baseTopPercent = isBackMirror ? 43.2 : 50;
                 const dispW = layout.dispWPercent;
@@ -3838,7 +4080,6 @@
                 ? `<div class="card-stamp-floating">${escapeHtml(cardData.stamp)}</div>`
                 : '';
 
-            // 表面DOM
             const frontCard = document.createElement('div');
             frontCard.className = `trading-card card-face-front rarity-${rarity}`;
             frontCard.innerHTML = `
@@ -3862,7 +4103,6 @@
                 </div>
             `;
 
-            // 裏面DOM（物理的に裏側から透けて見える左右線対称透過：scaleX(-1) & オフセット反転）
             const backCard = document.createElement('div');
             backCard.className = `trading-card card-face-back rarity-${rarity}`;
             const backSeeThroughImgHtml = cardData.imageData
@@ -3894,9 +4134,8 @@
             rotator.appendChild(frontCard);
             rotator.appendChild(backCard);
 
-            // スマホ指操作による画像位置ドラッグ（1本指）＆ピンチズーム（2本指）サポート
             if (onTouchTransform && cardData.imageData && frontImgEl && frontFrameEl) {
-                let gestureMode = 'none'; // 'none' | 'pan' | 'pinch'
+                let gestureMode = 'none';
                 let startX = 0;
                 let startY = 0;
                 let startOffsetX = cardData.offsetX || 0;
@@ -3981,7 +4220,6 @@
                         const frameW = Math.max(40, rect.width || 240);
                         const frameH = Math.max(40, rect.height || 280);
 
-                        // 指の動きに1:1で気持ちよく追従する感度（枠幅の半分ドラッグで端から端へ到達）
                         const deltaX = -(dx / frameW) * 140;
                         const deltaY = -(dy / frameH) * 140;
                         const nextOffX = Math.round(Math.min(50, Math.max(-50, startOffsetX + deltaX)));
@@ -4015,7 +4253,6 @@
                 return rotator;
             }
 
-            // 表面・裏面切り替え式 ＋ ワイド3D傾きホログラム鑑賞（最大±28°・表裏とも指/カーソルと自然な同方向傾き）
             let isBackFace = false;
             let tiltX = 0;
             let tiltY = 0;
@@ -4205,38 +4442,57 @@
         }
 
         async function saveCardsToStorage() {
-            const ok = await CardDB.replaceAllCards(AppState.cards);
-            if (!ok) {
-                try {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState.cards));
-                } catch (e) {
-                    showToast('保存容量の上限に達しました。古いカードを整理してください');
+            writeWindowNameCards(AppState.cards);
+            try {
+                if (window.localStorage) {
+                    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState.cards));
                 }
-            }
+            } catch (e) {}
+
+            await CardDB.replaceAllCards(AppState.cards);
             updateTabCount();
             ensureMonthlyDeck(false);
         }
 
         async function loadCardsFromStorage() {
+            const candidates = [];
+
             const dbCards = await CardDB.getAllCards();
             if (Array.isArray(dbCards) && dbCards.length > 0) {
-                AppState.cards = dbCards;
-                updateTabCount();
-                return;
+                candidates.push(dbCards);
             }
+
             try {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    if (Array.isArray(parsed) && parsed.length > 0) {
-                        AppState.cards = parsed;
-                        await CardDB.replaceAllCards(AppState.cards);
-                        localStorage.removeItem(STORAGE_KEY);
+                if (window.localStorage) {
+                    const raw = window.localStorage.getItem(STORAGE_KEY);
+                    if (raw) {
+                        const parsed = JSON.parse(raw);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            candidates.push(parsed);
+                        }
                     }
                 }
-            } catch (e) {
+            } catch (e) {}
+
+            const winCards = readWindowNameCards();
+            if (Array.isArray(winCards) && winCards.length > 0) {
+                candidates.push(winCards);
+            }
+
+            if (candidates.length > 0) {
+                candidates.sort((a, b) => b.length - a.length);
+                AppState.cards = candidates[0];
+                writeWindowNameCards(AppState.cards);
+                try {
+                    if (window.localStorage) {
+                        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(AppState.cards));
+                    }
+                } catch (e) {}
+                await CardDB.replaceAllCards(AppState.cards);
+            } else {
                 AppState.cards = [];
             }
+
             updateTabCount();
         }
 
@@ -4277,9 +4533,6 @@
         }
 
         async function handleUploadedFiles(fileList, forceBulkToBinder = false) {
-            if (AppState.tutorialActive && AppState.tutorialStep === 'gate') {
-                return;
-            }
             const files = Array.from(fileList || []).filter(f => f.type.startsWith('image/'));
             if (files.length === 0) return;
 
@@ -4296,11 +4549,6 @@
                 renderStudioPreview();
                 SoundFX.click();
                 showToast('スクショを読み込み、タイトル＆一言を自動生成しました！');
-                return;
-            }
-
-            if (AppState.tutorialActive) {
-                showToast('🎁 お試し体験中は図鑑への一括登録はできません。まずはおみくじを引いてみよう！');
                 return;
             }
 
@@ -4337,6 +4585,7 @@
                 });
             }
 
+            markTutorialBannerDismissed();
             await saveCardsToStorage();
             ensureMonthlyDeck(true);
             SoundFX.saveSparkle();
@@ -4345,145 +4594,67 @@
             showToast(`${files.length}枚のスクショをすべて重複なしのトレカ化して登録＆今月デッキを選出しました！`);
         }
 
-        function generateCardPngBlob(cardData, serialLabel = 'No.001') {
-            return new Promise((resolve) => {
-                const W = 750;
-                const H = 1075;
-                const canvas = document.createElement('canvas');
-                canvas.width = W;
-                canvas.height = H;
-                const ctx = canvas.getContext('2d');
-
-                const renderAndResolve = (imgOrNull) => {
-                    const grad = ctx.createLinearGradient(0, 0, W, H);
-                    if (cardData.rarity === 'SSR') {
-                        grad.addColorStop(0, '#f59e0b');
-                        grad.addColorStop(0.45, '#ec4899');
-                        grad.addColorStop(0.8, '#8b5cf6');
-                        grad.addColorStop(1, '#3b82f6');
-                    } else if (cardData.rarity === 'SR') {
-                        grad.addColorStop(0, '#1e3a8a');
-                        grad.addColorStop(0.5, '#312e81');
-                        grad.addColorStop(1, '#0f172a');
-                    } else {
-                        grad.addColorStop(0, '#334155');
-                        grad.addColorStop(1, '#0f172a');
-                    }
-                    ctx.fillStyle = grad;
-                    ctx.fillRect(0, 0, W, H);
-
-                    ctx.strokeStyle = cardData.rarity === 'SSR' ? '#fde047' : (cardData.rarity === 'SR' ? '#38bdf8' : '#94a3b8');
-                    ctx.lineWidth = 14;
-                    ctx.strokeRect(7, 7, W - 14, H - 14);
-
-                    ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
-                    ctx.beginPath();
-                    ctx.roundRect(28, 24, 130, 44, 22);
-                    ctx.fill();
-                    ctx.fillStyle = cardData.rarity === 'SSR' ? '#fde047' : (cardData.rarity === 'SR' ? '#7dd3fc' : '#ffffff');
-                    ctx.font = '900 26px Cinzel, serif';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillText(cardData.rarity || 'SSR', 93, 47);
-
-                    ctx.fillStyle = 'rgba(0,0,0,0.45)';
-                    ctx.beginPath();
-                    ctx.roundRect(W - 148, 28, 120, 36, 18);
-                    ctx.fill();
-                    ctx.fillStyle = '#ffffff';
-                    ctx.font = '700 18px sans-serif';
-                    ctx.fillText(serialLabel, W - 88, 46);
-
-                    const frame = { x: 28, y: 82, w: W - 56, h: 720 };
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.roundRect(frame.x, frame.y, frame.w, frame.h, 22);
-                    ctx.clip();
-                    ctx.fillStyle = '#0b0d17';
-                    ctx.fillRect(frame.x, frame.y, frame.w, frame.h);
-
-                    if (imgOrNull) {
-                        const frameAspect = frame.w / frame.h;
-                        const layout = computeCardImageLayout(
-                            imgOrNull.width,
-                            imgOrNull.height,
-                            frameAspect,
-                            cardData.zoom,
-                            cardData.offsetX,
-                            cardData.offsetY
-                        );
-                        const dw = frame.w * (layout.dispWPercent / 100);
-                        const dh = frame.h * (layout.dispHPercent / 100);
-                        const dx = frame.x + (frame.w - dw) / 2 + frame.w * (layout.shiftXPercentOfFrame / 100);
-                        const dy = frame.y + (frame.h - dh) / 2 + frame.h * (layout.shiftYPercentOfFrame / 100);
-                        ctx.drawImage(imgOrNull, dx, dy, dw, dh);
-                    }
-
-                    if (cardData.stamp) {
-                        ctx.font = '64px sans-serif';
-                        ctx.textAlign = 'right';
-                        ctx.textBaseline = 'bottom';
-                        ctx.fillText(cardData.stamp, frame.x + frame.w - 18, frame.y + frame.h - 14);
-                    }
-                    ctx.restore();
-
-                    ctx.strokeStyle = 'rgba(255,255,255,0.55)';
-                    ctx.lineWidth = 4;
-                    ctx.beginPath();
-                    ctx.roundRect(frame.x, frame.y, frame.w, frame.h, 22);
-                    ctx.stroke();
-
-                    const plate = { x: 28, y: 820, w: W - 56, h: 225 };
-                    ctx.fillStyle = 'rgba(12, 14, 26, 0.88)';
-                    ctx.beginPath();
-                    ctx.roundRect(plate.x, plate.y, plate.w, plate.h, 22);
-                    ctx.fill();
-
-                    ctx.fillStyle = cardData.accentColor || '#ff4d94';
-                    ctx.beginPath();
-                    ctx.roundRect(plate.x + 22, plate.y + 18, 220, 32, 16);
-                    ctx.fill();
-                    ctx.fillStyle = '#ffffff';
-                    ctx.font = '800 17px sans-serif';
-                    ctx.textAlign = 'left';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillText((cardData.oshiName || '推し活メモ').slice(0, 14), plate.x + 36, plate.y + 34);
-
-                    ctx.fillStyle = '#ffffff';
-                    ctx.font = '800 30px sans-serif';
-                    ctx.fillText((cardData.title || '').slice(0, 20), plate.x + 22, plate.y + 82);
-
-                    ctx.fillStyle = '#cbd5e1';
-                    ctx.font = '600 20px sans-serif';
-                    const q = cardData.quote || '';
-                    ctx.fillText(q.slice(0, 28), plate.x + 22, plate.y + 124);
-                    if (q.length > 28) {
-                        ctx.fillText(q.slice(28, 56), plate.x + 22, plate.y + 154);
-                    }
-
-                    ctx.fillStyle = '#94a3b8';
-                    ctx.font = '700 16px sans-serif';
-                    ctx.fillText('OSHI CARD VAULT', plate.x + 22, plate.y + 198);
-                    ctx.textAlign = 'right';
-                    ctx.fillText(cardData.streamDate || '', plate.x + plate.w - 22, plate.y + 198);
-
-                    try {
-                        canvas.toBlob((blob) => resolve(blob || null), 'image/png');
-                    } catch (err) {
-                        resolve(null);
-                    }
+        function exportVaultBackupJson() {
+            try {
+                const payload = {
+                    app: 'oshi_card_vault',
+                    version: 1,
+                    exportedAt: new Date().toISOString(),
+                    cards: AppState.cards,
+                    gachaHistory: loadGachaHistoryMap(),
+                    monthlyDeck: AppState.monthlyDeck,
+                    xHashtag: safeStorageGet(X_HASHTAG_KEY) || ''
                 };
+                const jsonStr = JSON.stringify(payload);
+                const blob = new Blob([jsonStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `oshi_card_vault_backup_${getTodayDateString()}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+                SoundFX.saveSparkle();
+                showToast(`💾 図鑑データ（${AppState.cards.length}枚）のバックアップを保存しました！`);
+            } catch (e) {
+                showToast('バックアップの書き出しに失敗しました');
+            }
+        }
 
-                if (cardData.imageData) {
-                    const img = new Image();
-                    img.crossOrigin = 'anonymous';
-                    img.onload = () => renderAndResolve(img);
-                    img.onerror = () => renderAndResolve(null);
-                    img.src = cardData.imageData;
-                } else {
-                    renderAndResolve(null);
+        async function importVaultBackupJson(file) {
+            if (!file) return;
+            try {
+                const text = await file.text();
+                const parsed = JSON.parse(text);
+                if (!parsed || !Array.isArray(parsed.cards)) {
+                    showToast('有効なバックアップファイルではありません');
+                    return;
                 }
-            });
+                AppState.cards = parsed.cards;
+                if (parsed.gachaHistory && typeof parsed.gachaHistory === 'object') {
+                    safeStorageSet(GACHA_HISTORY_KEY, JSON.stringify(parsed.gachaHistory));
+                }
+                if (parsed.monthlyDeck && typeof parsed.monthlyDeck === 'object') {
+                    AppState.monthlyDeck = parsed.monthlyDeck;
+                    saveMonthlyDeck();
+                }
+                if (typeof parsed.xHashtag === 'string') {
+                    safeStorageSet(X_HASHTAG_KEY, parsed.xHashtag);
+                    const tagEl = document.getElementById('input-x-hashtag');
+                    if (tagEl) tagEl.value = parsed.xHashtag;
+                }
+                markTutorialBannerDismissed();
+                syncUsedTextsFromExistingCards();
+                await saveCardsToStorage();
+                ensureMonthlyDeck(false);
+                renderBinderView();
+                renderGachaView();
+                SoundFX.saveSparkle();
+                showToast(`📂 バックアップから ${AppState.cards.length} 枚の図鑑データを復元しました！`);
+            } catch (e) {
+                showToast('バックアップファイルの読み込みに失敗しました');
+            }
         }
 
         function renderBinderTagChips() {
@@ -5018,7 +5189,7 @@
         function loadTodayGachaResult() {
             const todayStr = getTodayDateString();
             try {
-                const raw = localStorage.getItem(GACHA_DAILY_KEY);
+                const raw = safeStorageGet(GACHA_DAILY_KEY);
                 if (raw) {
                     const parsed = JSON.parse(raw);
                     if (parsed && parsed.date === todayStr && parsed.card) {
@@ -5033,14 +5204,14 @@
         function saveTodayGachaResult(record) {
             AppState.todayGacha = record;
             try {
-                localStorage.setItem(GACHA_DAILY_KEY, JSON.stringify(record));
+                safeStorageSet(GACHA_DAILY_KEY, JSON.stringify(record));
             } catch (e) {}
             saveGachaHistoryEntry(record);
         }
 
         function loadGachaHistoryMap() {
             try {
-                const raw = localStorage.getItem(GACHA_HISTORY_KEY);
+                const raw = safeStorageGet(GACHA_HISTORY_KEY);
                 if (raw) {
                     const parsed = JSON.parse(raw);
                     if (parsed && typeof parsed === 'object') return parsed;
@@ -5072,7 +5243,7 @@
                 }
             };
             try {
-                localStorage.setItem(GACHA_HISTORY_KEY, JSON.stringify(history));
+                safeStorageSet(GACHA_HISTORY_KEY, JSON.stringify(history));
             } catch (e) {}
         }
 
@@ -5168,13 +5339,13 @@
             }
         }
 
-        async function loadDefaultGitHubSamples() {
+        function buildMemoryTrialCards() {
             const baseTime = Date.now();
-            DEFAULT_GITHUB_SAMPLES.forEach((sample, idx) => {
+            return TRIAL_GITHUB_SAMPLES.map((sample, idx) => {
                 const gen = generateUniqueCardText(sample.rarity, sample.stamp);
-                AppState.cards.push({
-                    id: 'sample_' + baseTime + '_' + idx,
-                    createdAt: baseTime + (DEFAULT_GITHUB_SAMPLES.length - idx),
+                return {
+                    id: 'trial_sample_' + baseTime + '_' + idx,
+                    createdAt: baseTime - idx,
                     imageData: sample.url,
                     zoom: 100,
                     offsetX: 0,
@@ -5186,29 +5357,31 @@
                     streamDate: '',
                     title: gen.title,
                     quote: gen.quote
-                });
+                };
             });
-            await saveCardsToStorage();
         }
 
-        function isTutorialCompleted() {
+        function isTutorialBannerDismissed() {
+            if (AppState.cards.length > 0) return true;
             try {
-                return localStorage.getItem(TUTORIAL_COMPLETED_KEY) === 'true';
+                return safeStorageGet(TUTORIAL_COMPLETED_KEY) === 'true';
             } catch (e) {
                 return false;
             }
         }
 
-        function markTutorialCompleted() {
+        function markTutorialBannerDismissed() {
             AppState.tutorialActive = false;
             AppState.tutorialStep = 'none';
+            AppState.trialCards = [];
             try {
-                localStorage.setItem(TUTORIAL_COMPLETED_KEY, 'true');
+                safeStorageSet(TUTORIAL_COMPLETED_KEY, 'true');
             } catch (e) {}
             updateTutorialUI();
         }
 
         function updateTutorialUI() {
+            const showBanner = !isTutorialBannerDismissed() && AppState.cards.length === 0;
             const banner = document.getElementById('first-visit-tutorial-banner');
             const bannerTitle = document.getElementById('tutorial-banner-title');
             const bannerDesc = document.getElementById('tutorial-banner-desc');
@@ -5216,22 +5389,28 @@
             const skipBtn = document.getElementById('btn-tutorial-skip');
             const completeBox = document.getElementById('tutorial-complete-box');
 
-            const isGate = AppState.tutorialActive && AppState.tutorialStep === 'gate';
-            const isTrial = AppState.tutorialActive && AppState.tutorialStep === 'trial';
-
-            document.body.classList.toggle('tutorial-gate-locked', isGate);
-            document.body.classList.toggle('tutorial-trial-locked', isTrial);
-
             if (banner) {
-                banner.classList.toggle('hidden', !AppState.tutorialActive);
+                banner.classList.toggle('hidden', !showBanner);
             }
-            if (AppState.tutorialActive) {
-                if (isGate) {
+            if (showBanner) {
+                if (AppState.tutorialActive && AppState.tutorialStep === 'trial') {
+                    if (bannerTitle) {
+                        bannerTitle.textContent = '🔮 サンプル7枚でお試し体験中！パックをタップしてみよう';
+                    }
+                    if (bannerDesc) {
+                        bannerDesc.textContent = '※ サンプルはメモリ上のみで動作し、あなたの保存済み図鑑データは一切上書きされません。';
+                    }
+                    if (goGachaBtn) goGachaBtn.classList.add('hidden');
+                    if (skipBtn) {
+                        const sSpan = skipBtn.querySelector('span');
+                        if (sSpan) sSpan.textContent = '✕ お試しを終了';
+                    }
+                } else {
                     if (bannerTitle) {
                         bannerTitle.textContent = '✨ 初回限定！お試しおみくじ体験チュートリアル';
                     }
                     if (bannerDesc) {
-                        bannerDesc.textContent = '「🔮 お試しを始める」を押すとサンプル7枚でおみくじ体験ができます（おみくじを引くとサンプルは自動消去され、あなた専用の図鑑が始まります）。';
+                        bannerDesc.textContent = 'サンプルカード7枚で「🔮 今日の推しおみくじ」をお試し体験できます（あなたの保存済み図鑑は上書きされません）。';
                     }
                     if (goGachaBtn) {
                         goGachaBtn.classList.remove('hidden');
@@ -5240,23 +5419,7 @@
                     }
                     if (skipBtn) {
                         const sSpan = skipBtn.querySelector('span');
-                        if (sSpan) sSpan.textContent = '⏭️ スキップして始める';
-                    }
-                } else if (isTrial) {
-                    if (bannerTitle) {
-                        bannerTitle.textContent = '🔮 お試し体験中：パックをタップして今日のおみくじを引こう！';
-                    }
-                    if (bannerDesc) {
-                        bannerDesc.textContent = '※ お試し中は図鑑への新規登録のみロックされています。おみくじを引くとサンプルは自動削除され本番図鑑へ移行します！';
-                    }
-                    if (goGachaBtn) {
-                        goGachaBtn.classList.toggle('hidden', AppState.activeTab === 'gacha');
-                        const span = goGachaBtn.querySelector('span');
-                        if (span) span.textContent = '🔮 おみくじ画面へ戻る';
-                    }
-                    if (skipBtn) {
-                        const sSpan = skipBtn.querySelector('span');
-                        if (sSpan) sSpan.textContent = '⏭️ お試しを終了して始める';
+                        if (sSpan) sSpan.textContent = '✕ 閉じる';
                     }
                 }
             }
@@ -5265,63 +5428,13 @@
             }
         }
 
-        async function completeFirstVisitTutorial(options = {}) {
-            const { silent = false, clearAllCards = true, keepCurrentResultView = false } = options;
-
-            if (clearAllCards) {
-                AppState.cards = [];
-            } else {
-                AppState.cards = AppState.cards.filter(c => !String(c.id || '').startsWith('sample_'));
-            }
-
-            try {
-                localStorage.removeItem(GACHA_DAILY_KEY);
-                localStorage.removeItem(GACHA_HISTORY_KEY);
-                localStorage.removeItem(MONTHLY_DECK_KEY);
-            } catch (e) {}
-
-            if (!keepCurrentResultView) {
-                AppState.todayGacha = null;
-            }
-            AppState.monthlyDeck = null;
-            AppState.editingCardId = null;
-            AppState.selectedCardIds.clear();
-
-            if (AppState.draft && (!AppState.draft.imageData || String(AppState.draft.imageData).includes('raw.githubusercontent.com/goki4597-create/oshi-images'))) {
-                const gen = generateUniqueCardText('SSR', '💖');
-                AppState.draft = {
-                    imageData: null,
-                    zoom: 100,
-                    offsetX: 0,
-                    offsetY: 0,
-                    rarity: 'SSR',
-                    accentColor: '#ff4d94',
-                    stamp: '💖',
-                    oshiName: AppState.draft.oshiName && AppState.draft.oshiName !== 'サンプル推し'
-                        ? AppState.draft.oshiName
-                        : '本日の神スクショ',
-                    streamDate: '',
-                    title: gen.title,
-                    quote: gen.quote
-                };
-            }
-
-            markTutorialCompleted();
-            await saveCardsToStorage();
-            ensureMonthlyDeck(true);
-            syncFormInputsFromDraft();
-            renderStudioPreview();
-            renderBinderView();
-            renderGachaCalendarBoard();
-
-            if (!silent) {
-                SoundFX.saveSparkle();
-                VFX.burst(window.innerWidth / 2, window.innerHeight * 0.35, 42, ['#fde047', '#ff4d94', '#38bdf8', '#ffffff']);
-                if (!keepCurrentResultView) {
-                    switchTab('studio');
-                }
-                showToast('🎉 サンプルデータを消去し、あなた専用のパーソナル図鑑がスタートしました！');
-            }
+        function startMemoryTrialExperience() {
+            AppState.trialCards = buildMemoryTrialCards();
+            AppState.tutorialActive = true;
+            AppState.tutorialStep = 'trial';
+            updateTutorialUI();
+            switchTab('gacha');
+            showToast('🔮 サンプル7枚を読み込みました！パックをタップしてお試しおみくじを引いてみよう！');
         }
 
         function renderGachaView() {
@@ -5335,10 +5448,16 @@
                 adminPanel.classList.toggle('hidden', !AppState.adminMode);
             }
 
+            if (AppState.tutorialActive && AppState.tutorialStep === 'trial') {
+                packBox.classList.remove('hidden');
+                resultArea.classList.add('hidden');
+                return;
+            }
+
             if (AppState.todayGacha) {
                 packBox.classList.add('hidden');
                 resultArea.classList.remove('hidden');
-                displayGachaResult(AppState.todayGacha, false);
+                displayGachaResult(AppState.todayGacha, false, false);
             } else {
                 packBox.classList.remove('hidden');
                 resultArea.classList.add('hidden');
@@ -5348,8 +5467,12 @@
         }
 
         function drawDailyGacha() {
-            if (AppState.todayGacha) return;
-            if (AppState.cards.length === 0) {
+            const isTrialDraw = Boolean(AppState.tutorialActive && AppState.tutorialStep === 'trial');
+
+            if (!isTrialDraw && AppState.todayGacha) return;
+
+            const activePool = isTrialDraw ? AppState.trialCards : AppState.cards;
+            if (!activePool || activePool.length === 0) {
                 showToast('先にマイ図鑑へトレカを1枚以上登録してください！');
                 return;
             }
@@ -5359,26 +5482,31 @@
             packBox.classList.add('shaking');
             SoundFX.packCharge();
 
-            const deck = ensureMonthlyDeck(false);
-            const drawnSet = new Set(deck.drawnCardIds || []);
-            const idToCardMap = new Map(AppState.cards.map(c => [c.id, c]));
+            let pool = activePool;
+            let deck = null;
 
-            let remainingDeckCards = deck.deckCardIds
-                .filter(id => !drawnSet.has(id))
-                .map(id => idToCardMap.get(id))
-                .filter(Boolean);
+            if (!isTrialDraw) {
+                deck = ensureMonthlyDeck(false);
+                const drawnSet = new Set(deck.drawnCardIds || []);
+                const idToCardMap = new Map(AppState.cards.map(c => [c.id, c]));
 
-            if (remainingDeckCards.length === 0) {
-                deck.drawnCardIds = [];
-                saveMonthlyDeck();
-                remainingDeckCards = deck.deckCardIds
+                let remainingDeckCards = deck.deckCardIds
+                    .filter(id => !drawnSet.has(id))
                     .map(id => idToCardMap.get(id))
                     .filter(Boolean);
+
+                if (remainingDeckCards.length === 0) {
+                    deck.drawnCardIds = [];
+                    saveMonthlyDeck();
+                    remainingDeckCards = deck.deckCardIds
+                        .map(id => idToCardMap.get(id))
+                        .filter(Boolean);
+                }
+
+                pool = remainingDeckCards.length > 0 ? remainingDeckCards : AppState.cards;
             }
 
-            const pool = remainingDeckCards.length > 0 ? remainingDeckCards : AppState.cards;
-
-            const forced = AppState.tutorialActive
+            const forced = isTrialDraw
                 ? 'SSR'
                 : ((AppState.adminMode && AppState.adminForceRarity !== 'AUTO')
                     ? AppState.adminForceRarity
@@ -5386,8 +5514,7 @@
 
             let chosen = null;
 
-            if (AppState.tutorialActive) {
-                // お試し体験時はサンプル全7枚から均等にランダム選出し、SSR演出で排出する
+            if (isTrialDraw) {
                 const baseCard = pool[Math.floor(Math.random() * pool.length)];
                 chosen = { ...baseCard, rarity: 'SSR' };
             } else if (forced) {
@@ -5408,61 +5535,56 @@
             }
 
             const todayStr = getTodayDateString();
-            const targetIdx = AppState.cards.findIndex(c => c.id === chosen.id);
-            if (targetIdx >= 0) {
-                AppState.cards[targetIdx] = {
-                    ...AppState.cards[targetIdx],
-                    rarity: chosen.rarity,
-                    streamDate: todayStr
-                };
-                chosen = AppState.cards[targetIdx];
-                saveCardsToStorage();
+
+            if (!isTrialDraw) {
+                const targetIdx = AppState.cards.findIndex(c => c.id === chosen.id);
+                if (targetIdx >= 0) {
+                    AppState.cards[targetIdx] = {
+                        ...AppState.cards[targetIdx],
+                        rarity: chosen.rarity,
+                        streamDate: todayStr
+                    };
+                    chosen = AppState.cards[targetIdx];
+                    saveCardsToStorage();
+                } else {
+                    chosen = { ...chosen, streamDate: todayStr };
+                }
+
+                if (deck && chosen.id && !deck.drawnCardIds.includes(chosen.id)) {
+                    deck.drawnCardIds.push(chosen.id);
+                    saveMonthlyDeck();
+                    updateMonthlyDeckUI();
+                }
             } else {
                 chosen = { ...chosen, streamDate: todayStr };
             }
 
-            if (chosen.id && !deck.drawnCardIds.includes(chosen.id)) {
-                deck.drawnCardIds.push(chosen.id);
-                saveMonthlyDeck();
-                updateMonthlyDeckUI();
-            }
-
             const fortunePool = FORTUNES_BY_RARITY[chosen.rarity] || FORTUNES_BY_RARITY.R;
             const fortune = fortunePool[Math.floor(Math.random() * fortunePool.length)];
-            const idx = AppState.cards.findIndex(c => c.id === chosen.id);
+            const idx = activePool.findIndex(c => c.id === chosen.id);
             const serialNo = idx >= 0
-                ? `No.${String(AppState.cards.length - idx).padStart(3, '0')}`
+                ? `No.${String(activePool.length - idx).padStart(3, '0')}`
                 : 'No.001';
 
             setTimeout(() => {
                 packBox.classList.remove('shaking');
-                const wasTutorialDraw = AppState.tutorialActive;
                 const record = {
                     date: todayStr,
                     card: { ...chosen },
                     fortune,
-                    serialNo,
-                    isTrial: wasTutorialDraw
+                    serialNo
                 };
-                saveTodayGachaResult(record);
 
-                const revealCardUI = async () => {
+                if (!isTrialDraw) {
+                    saveTodayGachaResult(record);
+                }
+
+                const revealCardUI = () => {
                     packBox.classList.add('hidden');
                     const resultArea = document.getElementById('gacha-result-area');
                     resultArea.classList.remove('hidden');
-                    displayGachaResult(record, true, wasTutorialDraw);
+                    displayGachaResult(record, true, isTrialDraw);
                     SoundFX.revealRarity(chosen.rarity);
-
-                    // 運勢バナーとカード全体がスマホ1画面に同時に収まる位置へスムーズスクロール
-                    requestAnimationFrame(() => {
-                        const cardSlot = document.getElementById('gacha-card-slot');
-                        if (cardSlot) {
-                            const rect = cardSlot.getBoundingClientRect();
-                            const cardBottomInDoc = window.scrollY + rect.bottom;
-                            const targetY = Math.max(0, cardBottomInDoc - window.innerHeight + 92);
-                            window.scrollTo({ top: targetY, behavior: 'smooth' });
-                        }
-                    });
 
                     const cx = window.innerWidth / 2;
                     const cy = window.innerHeight * 0.44;
@@ -5474,17 +5596,14 @@
                         VFX.burst(cx, cy, 24, ['#cbd5e1', '#fde047', '#ffffff']);
                     }
 
-                    if (wasTutorialDraw) {
-                        await completeFirstVisitTutorial({
-                            silent: true,
-                            clearAllCards: true,
-                            keepCurrentResultView: true
-                        });
-                        displayGachaResult(record, true, true);
-                        showToast('🎉 お試し体験完了！サンプルを削除し、あなた専用の図鑑へ切り替わりました！');
+                    if (isTrialDraw) {
+                        AppState.tutorialActive = false;
+                        AppState.tutorialStep = 'none';
+                        AppState.trialCards = [];
+                        markTutorialBannerDismissed();
+                        showToast('🎉 お試しおみくじ体験完了！スクショを読み込んで自分だけの図鑑を作ってみよう！');
                     } else {
                         renderGachaCalendarBoard();
-                        updateTutorialUI();
                     }
                 };
 
@@ -5497,7 +5616,7 @@
             }, 600);
         }
 
-        function displayGachaResult(record, withAnimation = true, forceTrialFlag = false) {
+        function displayGachaResult(record, withAnimation = true, isTrialResult = false) {
             const { card, fortune, serialNo } = record;
             document.getElementById('fortune-rank').textContent = fortune.rank;
             document.getElementById('fortune-advice').textContent = fortune.advice;
@@ -5520,7 +5639,6 @@
                 if (span) span.textContent = '🔄 裏面を見る';
             }
 
-            const isTrialSampleResult = Boolean(forceTrialFlag || record.isTrial || AppState.tutorialActive || String(card && card.id || '').startsWith('sample_'));
             const shareActions = document.getElementById('gacha-share-actions');
             const dailyNotice = document.getElementById('gacha-daily-notice');
             const btnPostX = document.getElementById('btn-post-x');
@@ -5531,12 +5649,13 @@
             const isMobileMode = window.innerWidth <= 920 || ('ontouchstart' in window && navigator.maxTouchPoints > 0);
 
             if (shareActions) {
-                shareActions.classList.toggle('hidden', isTrialSampleResult);
+                shareActions.classList.toggle('hidden', isTrialResult);
             }
             if (mobileCopyHint) {
                 mobileCopyHint.classList.add('hidden');
             }
-            if (isTrialSampleResult) {
+
+            if (isTrialResult) {
                 if (btnPostX) {
                     btnPostX.classList.add('hidden');
                     btnPostX.removeAttribute('href');
@@ -5551,6 +5670,7 @@
                     const span = btnMobileSendX.querySelector('span');
                     if (span) span.textContent = '📤 画像をXへ送る';
                 }
+                prepareCachedShareFile(card, serialNo || 'No.001');
             } else {
                 if (btnPostX) {
                     btnPostX.classList.remove('hidden');
@@ -5563,9 +5683,10 @@
                     btnMobileSendX.classList.add('hidden');
                 }
             }
+
             if (dailyNotice) {
-                dailyNotice.textContent = isTrialSampleResult
-                    ? '※ お試し体験中は保存・ポストは無効になっています'
+                dailyNotice.textContent = isTrialResult
+                    ? '※ お試し体験中の結果のため保存・ポストは無効です'
                     : '※ おみくじは1日1回限定です。明日になるとまた新しい1枚を引けます✨';
             }
         }
@@ -5580,9 +5701,7 @@
             const hashtagInputEl = document.getElementById('input-x-hashtag');
             let rawTag = hashtagInputEl ? hashtagInputEl.value.trim() : '';
             if (!rawTag) {
-                try {
-                    rawTag = (localStorage.getItem(X_HASHTAG_KEY) || '').trim();
-                } catch (e) {}
+                rawTag = (safeStorageGet(X_HASHTAG_KEY) || '').trim();
             }
 
             let normalizedTag = '';
@@ -5635,7 +5754,7 @@
             if (!pipEl) return;
 
             try {
-                const savedPos = localStorage.getItem(MOBILE_PIP_POS_KEY);
+                const savedPos = safeStorageGet(MOBILE_PIP_POS_KEY);
                 if (savedPos) {
                     const { left, top } = JSON.parse(savedPos);
                     if (typeof left === 'number' && typeof top === 'number') {
@@ -5684,7 +5803,7 @@
                 pipEl.classList.remove('dragging');
                 try {
                     const rect = pipEl.getBoundingClientRect();
-                    localStorage.setItem(MOBILE_PIP_POS_KEY, JSON.stringify({ left: rect.left, top: rect.top }));
+                    safeStorageSet(MOBILE_PIP_POS_KEY, JSON.stringify({ left: rect.left, top: rect.top }));
                 } catch (e) {}
             };
 
@@ -5875,9 +5994,7 @@
 
             onId('input-oshi-name', 'input', (e) => {
                 AppState.draft.oshiName = e.target.value;
-                try {
-                    localStorage.setItem(OSHI_NAME_KEY, e.target.value);
-                } catch (err) {}
+                safeStorageSet(OSHI_NAME_KEY, e.target.value);
                 renderStudioPreview();
             });
             onId('input-card-title', 'input', (e) => {
@@ -5890,10 +6007,6 @@
             });
 
             onId('btn-save-to-binder', 'click', async () => {
-                if (AppState.tutorialActive) {
-                    showToast('🎁 お試し体験中は図鑑への登録はできません。まずはおみくじを引いてみよう！');
-                    return;
-                }
                 if (!AppState.draft.imageData) {
                     showToast('📸 先にスクショ画像を選択してください！');
                     return;
@@ -5927,6 +6040,7 @@
                     });
                 }
 
+                markTutorialBannerDismissed();
                 await saveCardsToStorage();
                 SoundFX.saveSparkle();
 
@@ -5936,12 +6050,9 @@
                     VFX.burst(rect.left + rect.width / 2, rect.top + rect.height / 2, 32);
                 }
 
-                // 登録完了後、最初の「📸 スクショをアップロードするとここに表示されます」のデフォルト状態に戻す
                 AppState.draft.streamDate = '';
-                try {
-                    const savedOshi = localStorage.getItem(OSHI_NAME_KEY);
-                    if (savedOshi !== null) AppState.draft.oshiName = savedOshi;
-                } catch (err) {}
+                const savedOshi = safeStorageGet(OSHI_NAME_KEY);
+                if (savedOshi !== null) AppState.draft.oshiName = savedOshi;
 
                 const nextGen = generateUniqueCardText(AppState.draft.rarity, AppState.draft.stamp);
                 AppState.draft.imageData = null;
@@ -5961,12 +6072,9 @@
                 SoundFX.click();
                 AppState.editingCardId = null;
                 AppState.draft.streamDate = '';
-                try {
-                    const savedOshi = localStorage.getItem(OSHI_NAME_KEY);
-                    if (savedOshi !== null) AppState.draft.oshiName = savedOshi;
-                } catch (err) {}
+                const savedOshi = safeStorageGet(OSHI_NAME_KEY);
+                if (savedOshi !== null) AppState.draft.oshiName = savedOshi;
 
-                // 1枚登録完了後は次のカード作成に備えてプレビュー画像・ズーム位置・テキストをデフォルト表示へリセット
                 const nextGen = generateUniqueCardText(AppState.draft.rarity, AppState.draft.stamp);
                 AppState.draft.imageData = null;
                 AppState.draft.zoom = 100;
@@ -6045,7 +6153,18 @@
                 }
             });
 
-            // まとめて編集モード（一括レアリティ変更 ＆ タップ即削除モード）のイベント
+            onId('btn-export-backup', 'click', () => {
+                SoundFX.click();
+                exportVaultBackupJson();
+            });
+
+            onId('input-import-backup', 'change', async (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    await importVaultBackupJson(e.target.files[0]);
+                    e.target.value = '';
+                }
+            });
+
             onId('btn-toggle-batch-mode', 'click', () => {
                 SoundFX.click();
                 AppState.batchModeActive = !AppState.batchModeActive;
@@ -6127,56 +6246,21 @@
                 showToast(`🗑️ 選択した ${delCount} 枚のカードを削除しました`);
             });
 
-            // まとめて編集ボタンのすぐ横にある「図鑑を空にする」も確認ダイアログを表示
             onId('btn-clear-binder', 'click', () => {
                 if (AppState.cards.length === 0) return;
                 SoundFX.click();
                 requestConfirmClearAllCards();
             });
 
-            // ハッシュタグ自動保存
-            const hashtagInput = document.getElementById('input-x-hashtag');
-            if (hashtagInput) {
-                try {
-                    const savedTag = localStorage.getItem(X_HASHTAG_KEY);
-                    if (savedTag !== null) hashtagInput.value = savedTag;
-                } catch (e) {}
-                hashtagInput.addEventListener('input', (e) => {
-                    try {
-                        localStorage.setItem(X_HASHTAG_KEY, e.target.value);
-                    } catch (err) {}
-                    const btnPostX = document.getElementById('btn-post-x');
-                    if (btnPostX && AppState.todayGacha) {
-                        btnPostX.href = buildXIntentUrl();
-                    }
-                });
-            }
-
-            // おみくじパック開封・結果操作・X投稿
             onId('gacha-pack-box', 'click', () => {
                 drawDailyGacha();
             });
 
             onId('btn-post-x', 'click', (e) => {
-                const isTrial = !AppState.todayGacha || AppState.tutorialActive || AppState.todayGacha.isTrial || String(AppState.todayGacha.card && AppState.todayGacha.card.id || '').startsWith('sample_');
-                if (isTrial) {
+                if (!AppState.todayGacha) {
                     e.preventDefault();
                     return;
                 }
-                SoundFX.click();
-                e.currentTarget.href = buildXIntentUrl();
-            });
-
-            onId('btn-save-gacha-png', 'click', () => {
-                const isTrial = !AppState.todayGacha || !AppState.todayGacha.card || AppState.tutorialActive || AppState.todayGacha.isTrial || String(AppState.todayGacha.card.id || '').startsWith('sample_');
-                if (isTrial) return;
-                SoundFX.click();
-                exportCardToPNG(AppState.todayGacha.card, AppState.todayGacha.serialNo || 'No.001');
-            });
-
-            onId('btn-mobile-send-x', 'click', (e) => {
-                const isTrial = !AppState.todayGacha || !AppState.todayGacha.card || AppState.tutorialActive || AppState.todayGacha.isTrial || String(AppState.todayGacha.card.id || '').startsWith('sample_');
-                if (isTrial) return;
                 SoundFX.click();
                 e.currentTarget.href = buildXIntentUrl();
             });
@@ -6188,30 +6272,56 @@
             });
 
             onId('btn-mobile-send-x', 'click', (e) => {
-                if (!AppState.todayGacha || !AppState.todayGacha.card || AppState.tutorialActive) return;
+                if (!AppState.todayGacha || !AppState.todayGacha.card) return;
                 SoundFX.click();
 
-                // 1. ハッシュタグを含めたラッキー一言をクリップボードへ保存
+                const btnEl = e.currentTarget;
+                const span = btnEl.querySelector('span');
+                const copyHint = document.getElementById('gacha-mobile-copy-hint');
+
                 const tweetText = buildXTweetText();
                 if (tweetText) {
                     copyTextFallback(tweetText);
                 }
-
-                // 2. ボタン表示とインライン案内を更新（下部トーストは出さない）
-                const span = e.currentTarget.querySelector('span');
-                if (span) span.textContent = '✅ 一言コピー済・画像を保存中...';
-                const copyHint = document.getElementById('gacha-mobile-copy-hint');
                 if (copyHint) copyHint.classList.remove('hidden');
 
-                // 3. トレカ画像を保存（OSの共有シートまたはダウンロード経由でXへ送れる状態にする）
+                const shareFile = AppState.cachedShareFile;
+                if (navigator.share && shareFile && (!navigator.canShare || navigator.canShare({ files: [shareFile] }))) {
+                    if (span) span.textContent = '📤 共有シートを開いています...';
+                    navigator.share({
+                        text: tweetText,
+                        files: [shareFile]
+                    }).catch(() => {}).finally(() => {
+                        if (span) span.textContent = '📤 画像をXへ送る';
+                    });
+                    return;
+                }
+
+                if (span) span.textContent = '✅ 一言コピー済・画像を保存中...';
                 exportCardToPNG(AppState.todayGacha.card, AppState.todayGacha.serialNo || 'No.001', { silent: true });
+                prepareCachedShareFile(AppState.todayGacha.card, AppState.todayGacha.serialNo || 'No.001');
 
                 setTimeout(() => {
                     if (span) span.textContent = '📤 画像をXへ送る';
                 }, 2200);
             });
 
-            // 表裏切り替えボタン各種
+            const hashtagInput = document.getElementById('input-x-hashtag');
+            if (hashtagInput) {
+                const savedTag = safeStorageGet(X_HASHTAG_KEY);
+                if (savedTag !== null) hashtagInput.value = savedTag;
+                hashtagInput.addEventListener('input', (e) => {
+                    safeStorageSet(X_HASHTAG_KEY, e.target.value);
+                    const btnPostX = document.getElementById('btn-post-x');
+                    if (btnPostX && AppState.todayGacha) {
+                        btnPostX.href = buildXIntentUrl();
+                    }
+                    if (AppState.todayGacha && AppState.todayGacha.card && !AppState.cachedShareFile) {
+                        prepareCachedShareFile(AppState.todayGacha.card, AppState.todayGacha.serialNo || 'No.001');
+                    }
+                });
+            }
+
             onId('btn-flip-preview-card', 'click', (e) => {
                 SoundFX.click();
                 toggleCardWrapperFlip('preview-card-wrap', e.currentTarget);
@@ -6229,7 +6339,6 @@
                 toggleCardWrapperFlip('binder-modal-card-slot', e.currentTarget);
             });
 
-            // カレンダー履歴モーダル閉じる
             onId('btn-close-cal-modal', 'click', () => {
                 SoundFX.click();
                 const m = document.getElementById('cal-history-modal');
@@ -6241,7 +6350,6 @@
                 }
             });
 
-            // 図鑑詳細モーダル操作（スマホ拡大表示用）
             onId('btn-close-binder-modal', 'click', () => {
                 SoundFX.click();
                 closeBinderDetailModal();
@@ -6272,7 +6380,6 @@
                 }
             });
 
-            // 個別・全件削除確認モーダル（はい / いいえ）
             onId('btn-confirm-delete-no', 'click', () => {
                 SoundFX.click();
                 closeConfirmDeleteModal();
@@ -6287,7 +6394,6 @@
                 }
             });
 
-            // マイ図鑑インライン編集モーダル操作
             onId('btn-close-inline-edit', 'click', () => {
                 SoundFX.click();
                 closeBinderInlineEditModal();
@@ -6384,25 +6490,22 @@
                 });
             });
 
-            // 初回限定チュートリアル操作
             onId('btn-tutorial-go-gacha', 'click', () => {
                 SoundFX.click();
-                AppState.tutorialStep = 'trial';
-                updateTutorialUI();
-                switchTab('gacha');
+                startMemoryTrialExperience();
             });
 
-            onId('btn-tutorial-skip', 'click', async () => {
+            onId('btn-tutorial-skip', 'click', () => {
                 SoundFX.click();
-                await completeFirstVisitTutorial({ silent: false, clearAllCards: true });
+                markTutorialBannerDismissed();
             });
 
-            onId('btn-tutorial-finish-start', 'click', async () => {
+            onId('btn-tutorial-finish-start', 'click', () => {
                 SoundFX.click();
-                await completeFirstVisitTutorial({ silent: false, clearAllCards: true });
+                markTutorialBannerDismissed();
+                switchTab('studio');
             });
 
-            // 管理者パスコード認証 ＆ テスト機能（左上の✨バッジ5回連打）
             let secretTapCount = 0;
             let secretTapTimer = null;
             onId('brand-secret-badge', 'click', () => {
@@ -6446,9 +6549,7 @@
 
             onId('btn-admin-reset-gacha', 'click', () => {
                 SoundFX.click();
-                try {
-                    localStorage.removeItem(GACHA_DAILY_KEY);
-                } catch (e) {}
+                safeStorageRemove(GACHA_DAILY_KEY);
                 AppState.todayGacha = null;
                 renderGachaView();
                 showToast('🔄 今日のおみくじ制限をリセットしました');
@@ -6470,7 +6571,6 @@
                 });
             });
 
-            // スマホPiPミニプレビュー操作
             onId('btn-pip-scroll-top', 'click', () => {
                 SoundFX.click();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -6489,20 +6589,13 @@
             VFX.init();
             await loadCardsFromStorage();
 
-            try {
-                const savedOshiName = localStorage.getItem(OSHI_NAME_KEY);
-                if (savedOshiName !== null && savedOshiName.trim() !== '') {
-                    AppState.draft.oshiName = savedOshiName;
-                }
-            } catch (e) {}
+            const savedOshiName = safeStorageGet(OSHI_NAME_KEY);
+            if (savedOshiName !== null && savedOshiName.trim() !== '') {
+                AppState.draft.oshiName = savedOshiName;
+            }
 
-            if (!isTutorialCompleted() && AppState.cards.length === 0) {
-                await loadDefaultGitHubSamples();
-                AppState.tutorialActive = true;
-                AppState.tutorialStep = 'gate';
-            } else {
-                AppState.tutorialActive = false;
-                AppState.tutorialStep = 'none';
+            if (AppState.cards.length > 0) {
+                safeStorageSet(TUTORIAL_COMPLETED_KEY, 'true');
             }
 
             syncUsedTextsFromExistingCards();
