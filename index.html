@@ -1346,6 +1346,7 @@
             height: 100vh;
             pointer-events: none;
             z-index: 80;
+            will-change: transform;
         }
 
         .vfx-screen-flash {
@@ -1354,8 +1355,9 @@
             pointer-events: none;
             z-index: 75;
             opacity: 0;
-            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.95) 0%, rgba(253, 224, 71, 0.55) 45%, transparent 80%);
-            animation: screenFlashAnim 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            will-change: opacity;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.9) 0%, rgba(253, 224, 71, 0.45) 45%, transparent 80%);
+            animation: screenFlashAnim 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .vfx-screen-flash.rarity-SSR {
@@ -1366,30 +1368,33 @@
             background: radial-gradient(circle at center, #ffffff 0%, rgba(56, 189, 248, 0.7) 40%, rgba(99, 102, 241, 0.35) 70%, transparent 88%);
         }
 
+        .vfx-screen-flash.rarity-R {
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.72) 0%, rgba(148, 163, 184, 0.25) 45%, transparent 78%);
+            animation-duration: 0.34s;
+        }
+
         @keyframes screenFlashAnim {
-            0% { opacity: 0.95; transform: scale(0.92); }
-            100% { opacity: 0; transform: scale(1.15); }
+            0% { opacity: 0.88; }
+            100% { opacity: 0; }
         }
 
         .vfx-card-reveal {
-            animation: cardRevealPop 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+            will-change: transform, opacity;
+            animation: cardRevealPop 0.56s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
 
         @keyframes cardRevealPop {
             0% {
                 opacity: 0;
-                transform: scale(0.35) rotateY(180deg) translateY(30px);
-                filter: brightness(2.2);
+                transform: scale(0.45) rotateY(180deg) translateY(20px);
             }
-            60% {
+            65% {
                 opacity: 1;
-                transform: scale(1.07) rotateY(-8deg) translateY(-4px);
-                filter: brightness(1.25);
+                transform: scale(1.05) rotateY(-6deg) translateY(-2px);
             }
             100% {
                 opacity: 1;
                 transform: scale(1) rotateY(0deg) translateY(0);
-                filter: brightness(1);
             }
         }
 
@@ -2750,9 +2755,9 @@
             }
 
             const isSSR = rarity === 'SSR';
-            const DURATION_MS = isSSR ? 4000 : 2100;
+            const DURATION_MS = isSSR ? 4000 : 1850;
 
-            const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+            const dpr = isSSR ? Math.min(window.devicePixelRatio || 1, 1.35) : 1.0;
             canvas.width = Math.floor(window.innerWidth * dpr);
             canvas.height = Math.floor(window.innerHeight * dpr);
 
@@ -2784,7 +2789,8 @@
                 rawImageSources.push(AppState.draft.imageData);
             }
 
-            const shuffledSources = [...rawImageSources].sort(() => Math.random() - 0.5).slice(0, 12);
+            const maxSpriteCount = isSSR ? 10 : 6;
+            const shuffledSources = [...rawImageSources].sort(() => Math.random() - 0.5).slice(0, maxSpriteCount);
             const loadedSprites = [];
             shuffledSources.forEach(src => {
                 const img = new Image();
@@ -2793,7 +2799,7 @@
                 img.src = src;
             });
 
-            const orbiterCount = isSSR ? 14 : 7;
+            const orbiterCount = isSSR ? 12 : 6;
             const orbiters = Array.from({ length: orbiterCount }, (_, i) => ({
                 spriteIdx: i,
                 baseAngle: (Math.PI * 2 * i) / orbiterCount + (Math.random() - 0.5) * 0.25,
@@ -2805,7 +2811,8 @@
                 hueOffset: (i * 360) / orbiterCount
             }));
 
-            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            const gl = canvas.getContext('webgl', { antialias: false, depth: false, stencil: false, preserveDrawingBuffer: false })
+                || canvas.getContext('experimental-webgl');
             const startTime = performance.now();
             let finished = false;
             let rafId = null;
@@ -2815,16 +2822,21 @@
                 finished = true;
                 if (rafId) cancelAnimationFrame(rafId);
                 skipBtn.removeEventListener('click', finish);
-                VFX.flash(rarity);
                 overlay.classList.add('fade-out');
-                onComplete();
+                requestAnimationFrame(() => {
+                    onComplete();
+                });
                 setTimeout(() => {
                     overlay.classList.add('hidden');
                     overlay.classList.remove('active', 'fade-out');
                     if (fxCtx && fxCanvas) {
                         fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
                     }
-                }, 320);
+                    if (gl) {
+                        gl.clearColor(0, 0, 0, 0);
+                        gl.clear(gl.COLOR_BUFFER_BIT);
+                    }
+                }, 280);
             };
 
             skipBtn.addEventListener('click', finish);
@@ -2915,18 +2927,20 @@
                         fxCtx.fillRect(-cardW / 2, -cardH / 2, cardW, cardH);
                     }
 
-                    const shimmerPos = ((elapsed * 0.0015 + idx * 0.2) % 2) - 0.5;
-                    const shimGrad = fxCtx.createLinearGradient(
-                        -cardW + shimmerPos * cardW * 2,
-                        -cardH / 2,
-                        shimmerPos * cardW * 2,
-                        cardH / 2
-                    );
-                    shimGrad.addColorStop(0, 'transparent');
-                    shimGrad.addColorStop(0.5, 'rgba(255, 255, 255, 0.42)');
-                    shimGrad.addColorStop(1, 'transparent');
-                    fxCtx.fillStyle = shimGrad;
-                    fxCtx.fillRect(-cardW / 2, -cardH / 2, cardW, cardH);
+                    if (isSSR) {
+                        const shimmerPos = ((elapsed * 0.0015 + idx * 0.2) % 2) - 0.5;
+                        const shimGrad = fxCtx.createLinearGradient(
+                            -cardW + shimmerPos * cardW * 2,
+                            -cardH / 2,
+                            shimmerPos * cardW * 2,
+                            cardH / 2
+                        );
+                        shimGrad.addColorStop(0, 'transparent');
+                        shimGrad.addColorStop(0.5, 'rgba(255, 255, 255, 0.42)');
+                        shimGrad.addColorStop(1, 'transparent');
+                        fxCtx.fillStyle = shimGrad;
+                        fxCtx.fillRect(-cardW / 2, -cardH / 2, cardW, cardH);
+                    }
 
                     fxCtx.restore();
 
@@ -3102,7 +3116,9 @@
                     col += (u_isSSR > 0.5 ? vec3(1.0, 0.96, 0.88) : vec3(0.75, 0.94, 1.0)) * pow(coreGlow, 1.45) * 0.55;
 
                     col += bokehLayer(uv, 4.2, 0.55, 11.3, u_isSSR > 0.5 ? 0.65 : 0.38);
-                    col += bokehLayer(uv * 1.35 + 0.4, 7.5, 0.95, 29.7, u_isSSR > 0.5 ? 0.48 : 0.25);
+                    if (u_isSSR > 0.5) {
+                        col += bokehLayer(uv * 1.35 + 0.4, 7.5, 0.95, 29.7, 0.48);
+                    }
 
                     col = col / (1.0 + col * 0.42);
                     col = pow(max(col, 0.0), vec3(0.92));
@@ -5586,15 +5602,17 @@
                     displayGachaResult(record, true, isTrialDraw);
                     SoundFX.revealRarity(chosen.rarity);
 
-                    const cx = window.innerWidth / 2;
-                    const cy = window.innerHeight * 0.44;
-                    if (chosen.rarity === 'SSR') {
-                        VFX.burst(cx, cy, 75, ['#fde047', '#ff4d94', '#38bdf8', '#a855f7', '#ffffff']);
-                    } else if (chosen.rarity === 'SR') {
-                        VFX.burst(cx, cy, 48, ['#38bdf8', '#818cf8', '#e0f2fe', '#ffffff']);
-                    } else {
-                        VFX.burst(cx, cy, 24, ['#cbd5e1', '#fde047', '#ffffff']);
-                    }
+                    requestAnimationFrame(() => {
+                        const cx = window.innerWidth / 2;
+                        const cy = window.innerHeight * 0.44;
+                        if (chosen.rarity === 'SSR') {
+                            VFX.burst(cx, cy, 65, ['#fde047', '#ff4d94', '#38bdf8', '#a855f7', '#ffffff']);
+                        } else if (chosen.rarity === 'SR') {
+                            VFX.burst(cx, cy, 40, ['#38bdf8', '#818cf8', '#e0f2fe', '#ffffff']);
+                        } else {
+                            VFX.burst(cx, cy, 18, ['#cbd5e1', '#fde047', '#ffffff']);
+                        }
+                    });
 
                     if (isTrialDraw) {
                         AppState.tutorialActive = false;
@@ -5611,9 +5629,11 @@
                     playRarityCutin(chosen.rarity, revealCardUI);
                 } else {
                     VFX.flash('R');
-                    revealCardUI();
+                    requestAnimationFrame(() => {
+                        revealCardUI();
+                    });
                 }
-            }, 600);
+            }, 560);
         }
 
         function displayGachaResult(record, withAnimation = true, isTrialResult = false) {
